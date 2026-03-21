@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tempo.fun — TEMPOFUN Token Sale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg0:#080c0c;--bg1:#0b1010;--bg2:#0f1515;--bg3:#141c1c;--bg4:#1c2828;
+  --accent:#2de2c2;--accent2:#1bbfa3;--accent3:#0d9e87;
+  --accent-dim:rgba(45,226,194,0.12);--accent-dim2:rgba(45,226,194,0.06);
+  --green:#22d3a5;--red:#f43f5e;--yellow:#fbbf24;
+  --text0:#e8f5f3;--text1:#a8c5c0;--text2:#5a7a75;--text3:#3a5550;
+  --border:rgba(45,226,194,0.1);--border2:rgba(45,226,194,0.25);--border3:rgba(45,226,194,0.45);
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg0);color:var(--text0);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg1);}
+::-webkit-scrollbar-thumb{background:var(--accent3);border-radius:2px;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(45,226,194,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(45,226,194,0.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse 60% 50% at 50% -5%,rgba(45,226,194,0.07) 0%,transparent 70%);pointer-events:none;z-index:0;}
+
+nav{position:sticky;top:0;z-index:200;background:rgba(8,12,12,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;height:56px;gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-text{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--accent);}
+.nav-logo-text span{color:var(--text1);font-weight:400;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+
+.page{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:36px 20px 80px;}
+
+.hero{text-align:center;margin-bottom:40px;}
+.hero-icon{width:88px;height:88px;border-radius:22px;background:#0d1313;border:1px solid rgba(45,226,194,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 48px rgba(45,226,194,0.2);}
+.hero-name{font-size:34px;font-weight:800;color:var(--text0);letter-spacing:-0.02em;}
+.hero-sym{font-family:var(--mono);font-size:16px;color:var(--accent);margin-top:5px;font-weight:700;}
+.hero-desc{font-size:15px;color:var(--text1);margin-top:14px;line-height:1.75;max-width:520px;margin-left:auto;margin-right:auto;}
+
+.sale-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center;}
+.stat-card-label{font-size:10px;color:var(--text2);font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.stat-card-val{font-size:17px;font-weight:700;font-family:var(--mono);}
+.stat-card-val.accent{color:var(--accent);}
+.stat-card-val.yellow{color:var(--yellow);}
+
+.sale-progress-card{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:22px;margin-bottom:28px;}
+.sp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.sp-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;}
+.sp-pct{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);}
+.sp-bar{height:10px;background:var(--bg4);border-radius:5px;overflow:hidden;margin-bottom:10px;}
+.sp-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent3),var(--accent));position:relative;transition:width 1s ease;min-width:0;}
+.sp-fill.has-progress::after{content:'';position:absolute;right:0;top:0;bottom:0;width:4px;background:#fff;border-radius:2px;box-shadow:0 0 10px var(--accent);}
+.sp-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:var(--mono);}
+.sp-sub{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.sp-sub-item{background:var(--bg3);border-radius:8px;padding:11px 13px;}
+.sp-sub-label{font-size:10px;color:var(--text2);font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;}
+.sp-sub-val{font-size:15px;font-weight:700;color:var(--text0);font-family:var(--mono);margin-top:4px;}
+
+.buy-card{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:26px;margin-bottom:24px;}
+.buy-title{font-size:18px;font-weight:800;color:var(--text0);margin-bottom:4px;}
+.buy-sub{font-size:13px;color:var(--text2);margin-bottom:24px;}
+
+.step{margin-bottom:24px;}
+.step-label{font-size:13px;font-weight:700;color:var(--text1);display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#000;font-size:11px;font-weight:800;flex-shrink:0;}
+.step-num.done{background:var(--green);}
+
+.wallet-connect-btn{width:100%;height:54px;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);display:flex;align-items:center;gap:14px;padding:0 18px;cursor:pointer;transition:all .2s;color:var(--text0);font-family:var(--sans);}
+.wallet-connect-btn:hover{border-color:var(--border3);background:var(--bg4);}
+.wallet-connect-btn.connected{border-color:var(--accent);background:rgba(45,226,194,0.06);}
+.w-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.w-meta{flex:1;text-align:left;}
+.w-name{font-size:14px;font-weight:700;}
+.w-status{font-size:12px;color:var(--text2);font-family:var(--mono);margin-top:1px;}
+
+.currency-tabs{display:flex;gap:8px;margin-bottom:16px;}
+.cur-tab{flex:1;height:46px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:14px;font-weight:700;font-family:var(--mono);cursor:pointer;transition:all .15s;}
+.cur-tab:hover{border-color:var(--border2);color:var(--text1);}
+.cur-tab.active{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
+
+.input-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:10px;transition:border-color .15s;margin-bottom:10px;}
+.input-wrap:focus-within{border-color:var(--border3);}
+.input-wrap input{flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:22px;font-weight:700;color:var(--text0);}
+.input-wrap input::placeholder{color:var(--text3);}
+.input-cur{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text2);flex-shrink:0;}
+
+.receive-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.receive-label{font-size:12px;color:var(--text2);margin-bottom:2px;}
+.receive-val{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent);}
+.receive-sym{font-size:12px;color:var(--text2);font-family:var(--mono);margin-top:2px;}
+
+.rate-info{background:var(--bg3);border-radius:8px;padding:13px 15px;margin-bottom:18px;}
+.rate-row{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;}
+.rate-row .rl{color:var(--text2);}
+.rate-row .rv{color:var(--text0);font-family:var(--mono);}
+
+.buy-now-btn{width:100%;height:58px;border-radius:12px;border:none;background:var(--accent);color:#000;font-size:18px;font-weight:800;font-family:var(--sans);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.buy-now-btn:hover:not(:disabled){background:var(--accent2);box-shadow:0 0 36px rgba(45,226,194,0.42);transform:translateY(-2px);}
+.buy-now-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+.disabled-overlay{opacity:.4;pointer-events:none;}
+
+.success-card{background:var(--bg2);border:2px solid rgba(45,226,194,0.4);border-radius:16px;padding:30px;text-align:center;margin-bottom:24px;display:none;}
+.success-icon{font-size:56px;margin-bottom:16px;}
+.success-title{font-size:24px;font-weight:800;color:var(--accent);margin-bottom:10px;}
+.success-desc{font-size:14px;color:var(--text1);line-height:1.75;margin-bottom:22px;}
+.success-box{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:18px;margin-bottom:16px;text-align:left;}
+.s-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);}
+.s-row:last-child{border-bottom:none;}
+.sl{font-size:12px;color:var(--text2);}
+.sv{font-size:13px;color:var(--text0);font-family:var(--mono);font-weight:700;text-align:right;word-break:break-all;max-width:60%;}
+.sv.accent{color:var(--accent);}
+.notice-box{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.22);border-radius:12px;padding:16px;font-size:13px;color:#fef3c7;line-height:1.7;text-align:left;}
+.notice-box strong{color:var(--yellow);display:block;margin-bottom:4px;}
+
+.token-info-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px;}
+.ti-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;}
+.ti-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.ti-row:last-child{border-bottom:none;}
+.ti-label{font-size:13px;color:var(--text2);}
+.ti-val{font-size:13px;color:var(--text0);font-family:var(--mono);font-weight:700;}
+.ti-val.accent{color:var(--accent);}
+.addr-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.copy-btn{background:var(--accent-dim);border:none;color:var(--accent);font-family:var(--mono);font-size:10px;border-radius:4px;padding:3px 8px;cursor:pointer;transition:all .15s;}
+.copy-btn:hover{background:rgba(45,226,194,0.22);}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:28px;width:380px;max-width:92vw;transform:translateY(16px);transition:transform .25s;box-shadow:0 24px 80px rgba(0,0,0,0.7);}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.modal-title{font-size:19px;font-weight:800;color:var(--text0);}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:20px;line-height:1;}
+.modal-close:hover{color:var(--text0);}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
+.wallet-opt{display:flex;align-items:center;gap:14px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .18s;}
+.wallet-opt:hover{border-color:var(--border3);transform:translateX(4px);}
+.wo-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.wo-name{font-size:15px;font-weight:700;color:var(--text0);}
+.wo-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:600;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:13px 16px;font-size:13.5px;color:var(--text0);display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,0.5);min-width:260px;animation:slide-in .3s ease;}
+.toast.success{border-left:3px solid var(--accent);}
+.toast.error{border-left:3px solid var(--red);}
+@keyframes slide-in{from{transform:translateX(100px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.tx-spinner{width:20px;height:20px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.buy-more-btn{width:100%;height:46px;border-radius:10px;border:1px solid var(--border2);background:transparent;color:var(--text1);font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:all .18s;margin-top:12px;}
+.buy-more-btn:hover{border-color:var(--accent);color:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="nav-logo-text">tempo<span>.fun</span></span>
+  </a>
+  <div class="nav-right">
+    <div id="nav-wallet-status" style="font-family:var(--mono);font-size:12px;color:var(--text2);"></div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon" style="background:#080c0c;overflow:hidden;padding:0;"><img src="data:image/jpeg;base64,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" width="88" height="88" style="object-fit:cover;display:block;"></div>
+    <div class="hero-name">TempoFun</div>
+    <div class="hero-sym">$TEMPOFUN</div>
+    <div class="hero-desc">The official launch token of Tempo.fun — the first meme coin launchpad built on Tempo Network. Fair launch, 1 billion supply, starting at $100K market cap.</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="sale-stats">
+    <div class="stat-card">
+      <div class="stat-card-label">Total Supply</div>
+      <div class="stat-card-val accent">1,000,000,000</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">For Sale</div>
+      <div class="stat-card-val accent">800,000,000</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Market Cap</div>
+      <div class="stat-card-val yellow">$100,000</div>
+    </div>
+  </div>
+
+  <!-- SALE PROGRESS -->
+  <div class="sale-progress-card">
+    <div class="sp-header">
+      <span class="sp-title">Sale Progress</span>
+      <span class="sp-pct" id="sp-pct">0%</span>
+    </div>
+    <div class="sp-bar">
+      <div class="sp-fill" id="sp-fill" style="width:0%"></div>
+    </div>
+    <div class="sp-labels">
+      <span>0</span>
+      <span id="sp-sold-label">0 tokens sold</span>
+      <span>800,000,000</span>
+    </div>
+    <div class="sp-sub">
+      <div class="sp-sub-item">
+        <div class="sp-sub-label">Price per Token</div>
+        <div class="sp-sub-val">$0.000125</div>
+      </div>
+      <div class="sp-sub-item">
+        <div class="sp-sub-label">Tokens Remaining</div>
+        <div class="sp-sub-val" id="sp-remaining">800,000,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUY CARD -->
+  <div class="buy-card" id="buy-card">
+    <div class="buy-title">Buy Now ⚡</div>
+    <div class="buy-sub">Connect your wallet, choose currency and amount — tokens are delivered manually within 24h.</div>
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-label">
+        <span class="step-num" id="snum1">1</span>
+        Connect Wallet
+      </div>
+      <button class="wallet-connect-btn" id="connect-btn" onclick="openWalletModal()">
+        <div class="w-icon" style="background:#F6851B22;">🦊</div>
+        <div class="w-meta">
+          <div class="w-name" id="w-btn-name">Connect Wallet</div>
+          <div class="w-status" id="w-btn-status">MetaMask or Tempo Wallet</div>
+        </div>
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:var(--text2)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2-wrap">
+      <div class="step-label">
+        <span class="step-num" id="snum2">2</span>
+        Select Currency
+      </div>
+      <div id="step2-inner" class="disabled-overlay">
+        <div class="currency-tabs">
+          <button class="cur-tab active" onclick="setCur(this,'USDT')">USDT</button>
+          <button class="cur-tab" onclick="setCur(this,'USDC')">USDC</button>
+          <button class="cur-tab" onclick="setCur(this,'ETH')">ETH</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3-wrap">
+      <div class="step-label">
+        <span class="step-num" id="snum3">3</span>
+        Enter Amount &amp; Buy
+      </div>
+      <div id="step3-inner" class="disabled-overlay">
+        <div class="input-wrap">
+          <input type="number" id="buy-amount" placeholder="0.00" min="0" step="any" oninput="calcTokens()" autocomplete="off">
+          <span class="input-cur" id="cur-label">USDT</span>
+        </div>
+        <div class="receive-box">
+          <div>
+            <div class="receive-label">You will receive</div>
+            <div class="receive-sym">TEMPOFUN tokens</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="receive-val" id="recv-val">—</div>
+            <div class="receive-sym">TEMPOFUN</div>
+          </div>
+        </div>
+        <div class="rate-info">
+          <div class="rate-row"><span class="rl">Price per token</span><span class="rv" id="ri-price">$0.000125</span></div>
+          <div class="rate-row"><span class="rl">You pay</span><span class="rv" id="ri-pay">—</span></div>
+          <div class="rate-row"><span class="rl">Network</span><span class="rv">Tempo Network (EVM)</span></div>
+          <div class="rate-row"><span class="rl">Token delivery</span><span class="rv" style="color:var(--yellow);">Manual · within 24h</span></div>
+        </div>
+        <button class="buy-now-btn" id="buy-btn" onclick="executeBuy()" disabled>
+          ⚡ Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="success-card">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Purchase Complete!</div>
+    <div class="success-desc">Your payment has been sent. TEMPOFUN tokens will be delivered to your wallet <strong style="color:var(--text0);">within 24 hours</strong> manually by the Tempo.fun team.</div>
+    <div class="success-box">
+      <div class="s-row"><span class="sl">Amount Paid</span><span class="sv" id="s-paid">—</span></div>
+      <div class="s-row"><span class="sl">Tokens Purchased</span><span class="sv accent" id="s-tokens">—</span></div>
+      <div class="s-row"><span class="sl">Delivery Wallet</span><span class="sv" id="s-wallet">—</span></div>
+      <div class="s-row"><span class="sl">Transaction Hash</span><span class="sv" id="s-tx" style="font-size:11px;">—</span></div>
+    </div>
+    <div class="notice-box">
+      <strong>📬 How token delivery works</strong>
+      After your transaction is confirmed on-chain, the Tempo.fun team will manually send TEMPOFUN tokens to your connected wallet address within 24 hours. Save your transaction hash as proof of purchase.
+    </div>
+    <button class="buy-more-btn" onclick="resetBuy()">← Buy More</button>
+  </div>
+
+  <!-- TOKEN INFO -->
+  <div class="token-info-card">
+    <div class="ti-title">Token Information</div>
+    <div class="ti-row"><span class="ti-label">Name</span><span class="ti-val">TempoFun</span></div>
+    <div class="ti-row"><span class="ti-label">Ticker</span><span class="ti-val accent">$TEMPOFUN</span></div>
+    <div class="ti-row"><span class="ti-label">Total Supply</span><span class="ti-val">1,000,000,000</span></div>
+    <div class="ti-row"><span class="ti-label">For Sale</span><span class="ti-val accent">800,000,000 (80%)</span></div>
+    <div class="ti-row"><span class="ti-label">Team Reserved</span><span class="ti-val">200,000,000 (20%)</span></div>
+    <div class="ti-row"><span class="ti-label">Token Price</span><span class="ti-val">$0.000125</span></div>
+    <div class="ti-row"><span class="ti-label">Market Cap at Launch</span><span class="ti-val" style="color:var(--yellow);">$100,000</span></div>
+    <div class="ti-row"><span class="ti-label">Network</span><span class="ti-val">Tempo Network (EVM)</span></div>
+    <div class="ti-row"><span class="ti-label">Accepted</span><span class="ti-val">USDT · USDC · ETH</span></div>
+    <div class="ti-row">
+      <span class="ti-label">Payment Address</span>
+      <div class="addr-wrap">
+        <span class="ti-val" style="font-size:11px;">0x11B1...599A</span>
+        <button class="copy-btn" onclick="copyAddr()">Copy Full</button>
+      </div>
+    </div>
+    <div class="ti-row"><span class="ti-label">Token Delivery</span><span class="ti-val" style="color:var(--yellow);">Manual · within 24h</span></div>
+  </div>
+
+</div>
+
+<!-- WALLET MODAL -->
+<div class="modal-overlay" id="wallet-modal" onclick="if(event.target===this)closeWalletModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Connect Wallet</span>
+      <button class="modal-close" onclick="closeWalletModal()">✕</button>
+    </div>
+    <div class="modal-sub">Connect to purchase TEMPOFUN on Tempo Network.</div>
+    <div class="wallet-opt" onclick="connectWallet('metamask')">
+      <div class="wo-icon" style="background:#F6851B22;">🦊</div>
+      <div>
+        <div class="wo-name">MetaMask</div>
+        <div class="wo-desc">Browser extension — most popular EVM wallet</div>
+      </div>
+    </div>
+    <div class="wallet-opt" onclick="connectWallet('tempo')">
+      <div class="wo-icon" style="background:rgba(45,226,194,0.1);">
+        <svg width="28" height="28" viewBox="0 0 200 200" fill="none">
+          <rect x="38" y="44" width="30" height="112" rx="4" fill="#2de2c2"/>
+          <polygon points="68,44 100,44 100,58 68,82" fill="#2de2c2"/>
+          <rect x="68" y="92" width="70" height="24" rx="4" fill="#2de2c2"/>
+          <polygon points="68,116 100,116 100,130 68,156" fill="#2de2c2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="wo-name">Tempo Wallet</div>
+        <div class="wo-desc">Native Tempo Network wallet</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:16px;">By connecting you agree to the Terms of Service</p>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const FUND_ADDRESS = '0x11B1ADa63BB2fF85F09c465312B8357c26C1599A';
+const TOKEN_PRICE_USD = 0.000125;
+const TOTAL_SALE = 800_000_000;
+
+// ERC-20 contract addresses (Ethereum mainnet — update for Tempo Network)
+const ERC20_ADDRS = {
+  USDT: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+};
+const ERC20_DECIMALS = { USDT: 6, USDC: 6 };
+
+let walletAddress = '';
+let walletConnected = false;
+let selectedCur = 'USDT';
+let ethUSD = 3200;
+let soldTokens = 0;
+
+// ── PROGRESS ──
+function updateProgress(){
+  const pct = soldTokens > 0 ? Math.min((soldTokens/TOTAL_SALE*100),100) : 0;
+  const pctStr = pct.toFixed(2) + '%';
+  document.getElementById('sp-pct').textContent = pctStr;
+  const fill = document.getElementById('sp-fill');
+  fill.style.width = pct + '%';
+  if(pct > 0) fill.classList.add('has-progress');
+  document.getElementById('sp-sold-label').textContent = soldTokens.toLocaleString() + ' tokens sold';
+  const rem = Math.max(0, TOTAL_SALE - soldTokens);
+  document.getElementById('sp-remaining').textContent = rem.toLocaleString();
+}
+updateProgress();
+
+// ── CURRENCY ──
+function setCur(el, cur){
+  selectedCur = cur;
+  document.querySelectorAll('.cur-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('cur-label').textContent = cur;
+  if(cur === 'ETH'){
+    document.getElementById('ri-price').textContent = (TOKEN_PRICE_USD / ethUSD).toFixed(10) + ' ETH';
+  } else {
+    document.getElementById('ri-price').textContent = '$0.000125';
+  }
+  calcTokens();
+}
+
+// ── CALC ──
+function calcTokens(){
+  const raw = document.getElementById('buy-amount').value;
+  const amt = parseFloat(raw);
+  const btn = document.getElementById('buy-btn');
+
+  if(!amt || amt <= 0 || isNaN(amt)){
+    document.getElementById('recv-val').textContent = '—';
+    document.getElementById('ri-pay').textContent = '—';
+    btn.disabled = true;
+    btn.innerHTML = '⚡ Buy Now';
+    return;
+  }
+
+  let usd = amt;
+  if(selectedCur === 'ETH') usd = amt * ethUSD;
+
+  const tokens = Math.floor(usd / TOKEN_PRICE_USD);
+  const fmt = tokens >= 1_000_000
+    ? (tokens / 1_000_000).toFixed(2) + 'M'
+    : tokens.toLocaleString();
+
+  document.getElementById('recv-val').textContent = fmt;
+  document.getElementById('ri-pay').textContent = amt.toFixed(selectedCur==='ETH'?6:2) + ' ' + selectedCur;
+
+  if(walletConnected && tokens > 0){
+    btn.disabled = false;
+    btn.innerHTML = `⚡ Buy ${fmt} TEMPOFUN`;
+  } else {
+    btn.disabled = true;
+  }
+}
+
+// ── WALLET ──
+function openWalletModal(){ document.getElementById('wallet-modal').classList.add('open'); }
+function closeWalletModal(){ document.getElementById('wallet-modal').classList.remove('open'); }
+
+async function connectWallet(type){
+  closeWalletModal();
+  if(typeof window.ethereum === 'undefined'){
+    showToast('No wallet found. Please install MetaMask.','error');
+    setTimeout(()=>window.open('https://metamask.io/download/','_blank'), 1200);
+    return;
+  }
+  try {
+    showToast(type==='metamask'?'Connecting MetaMask...':'Connecting Tempo Wallet...','success');
+    const accounts = await window.ethereum.request({ method:'eth_requestAccounts' });
+    walletAddress = accounts[0];
+    walletConnected = true;
+    onWalletConnected();
+  } catch(e){
+    showToast('Connection rejected.','error');
+  }
+}
+
+function onWalletConnected(){
+  const short = walletAddress.slice(0,6)+'...'+walletAddress.slice(-4);
+
+  // Nav
+  document.getElementById('nav-wallet-status').innerHTML =
+    `<span style="color:var(--green);margin-right:5px;">●</span><span style="color:var(--text1);">${short}</span>`;
+
+  // Step 1 btn
+  const cb = document.getElementById('connect-btn');
+  cb.classList.add('connected');
+  cb.innerHTML = `
+    <div class="w-icon" style="background:rgba(45,226,194,0.1);">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <div class="w-meta">
+      <div class="w-name" style="color:var(--accent);">${short}</div>
+      <div class="w-status" style="color:var(--green);">Connected ✓</div>
+    </div>`;
+  document.getElementById('snum1').classList.add('done');
+
+  // Unlock steps
+  document.getElementById('step2-inner').classList.remove('disabled-overlay');
+  document.getElementById('step3-inner').classList.remove('disabled-overlay');
+
+  showToast('Wallet connected ✓','success');
+  calcTokens();
+  fetchEthPrice();
+}
+
+async function fetchEthPrice(){
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+    const d = await r.json();
+    if(d?.ethereum?.usd){ ethUSD = d.ethereum.usd; calcTokens(); }
+  } catch(e){}
+}
+
+// ── EXECUTE BUY ──
+async function executeBuy(){
+  if(!walletConnected){ openWalletModal(); return; }
+  const amt = parseFloat(document.getElementById('buy-amount').value);
+  if(!amt || amt <= 0){ showToast('Enter a valid amount','error'); return; }
+
+  let usd = amt;
+  if(selectedCur === 'ETH') usd = amt * ethUSD;
+  const tokensBought = Math.floor(usd / TOKEN_PRICE_USD);
+  if(tokensBought <= 0){ showToast('Amount too small','error'); return; }
+
+  const btn = document.getElementById('buy-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="tx-spinner"></div>&nbsp; Confirm in wallet...';
+
+  try {
+    let txHash;
+    if(selectedCur === 'ETH'){
+      txHash = await sendETH(amt);
+    } else {
+      txHash = await sendERC20(selectedCur, amt);
+    }
+
+    soldTokens += tokensBought;
+    updateProgress();
+    showSuccess(amt, tokensBought, txHash);
+    showToast('🎉 Purchase confirmed!','success');
+
+  } catch(e){
+    console.error(e);
+    let msg = 'Transaction failed.';
+    if(e?.message){
+      if(e.message.includes('user rejected') || e.message.includes('denied')) msg = 'Transaction rejected.';
+      else if(e.message.includes('insufficient funds')) msg = 'Insufficient funds in wallet.';
+      else msg = e.message.slice(0,80);
+    }
+    showToast(msg,'error');
+    btn.disabled = false;
+    calcTokens();
+  }
+}
+
+async function sendETH(amountEth){
+  // Convert to wei hex
+  const weiFloat = amountEth * 1e18;
+  const weiBig = BigInt(Math.floor(weiFloat));
+  const weiHex = '0x' + weiBig.toString(16);
+  const txHash = await window.ethereum.request({
+    method: 'eth_sendTransaction',
+    params:[{ from:walletAddress, to:FUND_ADDRESS, value:weiHex, gas:'0x5208' }]
+  });
+  return txHash;
+}
+
+async function sendERC20(symbol, amount){
+  const tokenAddr = ERC20_ADDRS[symbol];
+  const dec = ERC20_DECIMALS[symbol];
+  const units = BigInt(Math.floor(amount * Math.pow(10, dec)));
+  // ABI encode transfer(address,uint256)
+  const toHex = FUND_ADDRESS.toLowerCase().replace('0x','').padStart(64,'0');
+  const valHex = units.toString(16).padStart(64,'0');
+  const data = '0xa9059cbb' + toHex + valHex;
+  const txHash = await window.ethereum.request({
+    method: 'eth_sendTransaction',
+    params:[{ from:walletAddress, to:tokenAddr, data:data, gas:'0x186A0' }]
+  });
+  return txHash;
+}
+
+// ── SUCCESS ──
+function showSuccess(paid, tokens, txHash){
+  document.getElementById('buy-card').style.display = 'none';
+  const sc = document.getElementById('success-card');
+  sc.style.display = 'block';
+  const short = walletAddress.slice(0,6)+'...'+walletAddress.slice(-4);
+  const cur = selectedCur;
+  document.getElementById('s-paid').textContent = paid.toFixed(cur==='ETH'?6:2) + ' ' + cur;
+  document.getElementById('s-tokens').textContent = tokens.toLocaleString() + ' TEMPOFUN';
+  document.getElementById('s-wallet').textContent = walletAddress;
+  document.getElementById('s-tx').textContent = txHash || '—';
+  sc.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetBuy(){
+  document.getElementById('success-card').style.display = 'none';
+  document.getElementById('buy-card').style.display = 'block';
+  document.getElementById('buy-amount').value = '';
+  document.getElementById('recv-val').textContent = '—';
+  document.getElementById('ri-pay').textContent = '—';
+  const btn = document.getElementById('buy-btn');
+  btn.disabled = true;
+  btn.innerHTML = '⚡ Buy Now';
+}
+
+// ── COPY ──
+function copyAddr(){
+  navigator.clipboard.writeText(FUND_ADDRESS)
+    .then(()=>showToast('Address copied!','success'))
+    .catch(()=>showToast('Copy failed — address: '+FUND_ADDRESS,'error'));
+}
+
+// ── TOAST ──
+function showToast(msg, type='success'){
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span style="font-size:15px;">${type==='success'?'✓':'✕'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{
+    t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all .3s';
+    setTimeout(()=>t.remove(),300);
+  },4500);
+}
+
+// ── METAMASK EVENTS ──
+if(typeof window.ethereum !== 'undefined'){
+  window.ethereum.on('accountsChanged', accs=>{
+    if(!accs.length){ location.reload(); }
+    else { walletAddress = accs[0]; onWalletConnected(); }
+  });
+  window.ethereum.on('chainChanged', ()=>{ location.reload(); });
+}
+</script>
+</body>
+</html>
